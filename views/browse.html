@@ -1,0 +1,163 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-offset-1 col-md-4">
+            <div class="list-group">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </div>
+                        <input type="text" ng-model="searchTask" class="form-control" placeholder="Search"/>
+                    </div>
+                </div>
+                <div class="title">
+                    <a href="#/post" class="btn btn-warning">Post a Task</a>
+                </div>
+                <br/>
+                <!--Task List-->
+                <!--<a ng-repeat="task in tasks | filter : searchTask | orderBy : 'title'" ng-href="#/edit/{{task.$id}}">-->
+                <a ng-repeat="task in tasks | filter : {title : searchTask, status : '!canceled'} | orderBy : 'datetime':true" ng-href="#/browse/{{task.$id}}">
+                    <div class="list-group-item">
+                        <div class="row-picture">
+                            <img class="circle" ng-src="{{task.gravatar}}">
+                        </div>
+                        <div class="row-content">
+                            <h4 class="list-group-item-heading">{{task.title | limitTo:3}}{{task.title.length>3 ? "..." : ""}}</h4>
+                            <span class="list-group-item-text">
+                                <span am-time-ago="task.datetime"></span>
+                            </span>
+                        </div>
+                        <div class="payment">
+                            <div>${{task.total}}</div>
+                            <span class="label status {{task.status}}">{{task.status}}</span>
+                        </div>
+                    </div>
+                    <div class="clearfix">&nbsp;</div>
+                    <hr>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div ng-show="listMode">
+                <img src="images/browse.jpg" class="img-responsive img-browse" alt=""/>
+            </div>
+            <div ng-show="!listMode">
+                <!--HEADER-->
+                <div class="row">
+                    <div class="col-md-8">
+                        <h3>{{selectedTask.title}}</h3>
+                        <span>
+                            <img ng-src="{{selectedTask.gravatar}}" class="img-circle gravatar"/>
+                            Posted by {{selectedTask.name}}
+                            <span am-time-ago="selectedTask.datetime"></span>
+                            <span class="label status {{selectedTask.status}}">{{selectedTask.status}}</span>
+                        </span>
+                    </div>
+                    <div class="col-md-4 title">
+                        <div class="price-tag">
+                            ${{selectedTask.total}}
+                            <div ng-show="isTaskCreator(selectedTask) && isOpen(selectedTask)">
+                                <div class="btn-group">
+                                    <a href="" class="btn btn-warning">Admin</a>
+                                    <a href="" class="btn btn-warning dropdown-toggle" data-toggle="dropdown"><span class="caret"></span> </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="" data-toggle="modal" data-target="#editModal">Edit Task</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="" ng-click="cancelTask(selectedTask.$id)">Cancel Task</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div ng-show="isOpen(selectedTask) && !isTaskCreator(selectedTask) && signedIn() && !alreadyOffered">
+                                <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#offModal">Make an Offer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <!--DESCRIPTION-->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Offers</h3>
+                            </div>
+                            <div class="panel-body">
+                                {{selectedTask.description}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--DESCRIPTION-->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Description</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="title" ng-hide="offers && offers.length > 0">
+                                    <span>No Offers For This Task Yet.</span>
+                                </div>
+                                <br>
+                                <div class="row" ng-repeat="offer in offers">
+                                    <div class="col-md-10">
+                                        <img ng-src="{{offer.gravatar}}" class="img-circle comment gravatar"/>
+                                        <span>{{offer.name}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--COMMENTS-->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Comments</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="title" ng-hide="comments && comments.length > 0">
+                                    <span>No Comment About This Task.</span>
+                                </div>
+                                <br>
+                                <div class="row" ng-repeat="com in comments">
+                                    <div class="col-md-1">
+                                        <img ng-src="{{com.gravatar}}" class="img-circle comment gravatar"/>
+                                    </div>
+                                    <div class="col-md-11">
+                                        <div class="well well-sm cmt">
+                                            <span class="cmt-title">{{com.name}}</span>
+                                            <span class="cmt-title pull-right"><span am-time-ago="com.datetime"></span></span>
+                                            <br>
+                                            <span>{{com.content}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+
+                                <div class="row" ng-show="signedIn()">
+                                    <div class="col-md-12">
+                                        <form ng-submit="addComment()">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <img ng-src=""/>
+                                                </div>
+                                                <input type="text" ng-model="content" col="10" row="3" class="form-control" placeholder="Comment here..." required/>
+                                            </div>
+                                            <span class="pull-right">
+                                                <input type="submit" class="btn btn-info" value="Comment"/>
+                                            </span>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div ng-include="'views/partials/edit.html'"></div>
+<div ng-include="'views/partials/offer.html'"></div>

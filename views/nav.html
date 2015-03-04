@@ -1,0 +1,43 @@
+<nav class="navbar navbar-info" ng-controller="NavController">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-inverse-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#/">Home</a>
+        </div>
+        <div class="navbar-collapse collapse navbar-inverse-collapse">
+            <ul class="nav navbar-nav navbar-left">
+                <!--<li ng-show="signedIn()"><a href="#/post">Post a Task</a></li>-->
+                <li ng-show="signedIn()"><a href="#" data-toggle="modal" data-target="#postModal">Post a Task</a></li>
+                <li><a href="#/browse">Brows Tasks</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li ng-hide="signedIn()"><a href="#/login" >Login</a></li>
+                <li ng-hide="signedIn()"><a href="#/register" >Register</a></li>
+                <li class="dropdown" ng-show="signedIn()">
+                    <a href="" data-target="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <img ng-src="{{currentUser.profile.gravatar}}" class="img-circle gravatar">
+                        &nbsp;
+                        {{currentUser.profile.name}}
+                        <b class="mdi-navigation-expand-more"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="" data-toggle="modal" data-target="#pasModal">
+                            <span class="mdi-action-lock"></span>
+                            Change Password
+                        </a></li>
+                        <li><a href="" ng-click="logout()">
+                            <span class="mdi-action-exit-to-app"></span>
+                            Logout
+                        </a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div ng-show="signedIn()" ng-include="'views/partials/changepass.html'"></div>
+    <div ng-show="signedIn()" ng-include="'views/partials/post.html'"></div>
+</nav>

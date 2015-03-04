@@ -1,0 +1,12 @@
+<div class="conteiner">
+    <div class="row title">
+        <div class="col-md-6 col-md-offset-3">
+            <form ng-submit="postTask(task)">
+                <input type="text" ng-model="task.title" class="form-control" placeholder="Task Title" required="required"/>
+                <textarea ng-model="task.description" class="form-control" placeholder="Task Description" required="required"></textarea>
+                <input type="number" ng-model="task.total" class="form-control" placeholder="Task Total Coast" required="required"/>
+                <input type="submit" value="Post" class="btn btn-warning"/>
+            </form>
+        </div>
+    </div>
+</div>

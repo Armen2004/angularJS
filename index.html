@@ -1,0 +1,67 @@
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="bower_components/angularjs-toaster/toaster.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.2.1/css/material.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.2.1/css/ripples.css" />
+
+    <link rel="stylesheet" href="styles/main.css">
+    
+  </head>
+  <body ng-app="TaskNinjaApp">
+    <toaster-container toaster-options="{'time-out': 3000, 'close-button':true, 'animation-class': 'toast-top-right'}"></toaster-container>
+    <div ng-include="'views/nav.html'"></div>
+
+    <div class="jumbotron">
+        <div ng-view=""></div>    
+    </div>
+
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angularjs-toaster/toaster.js"></script>
+    <script src="bower_components/moment/moment.js"></script>
+    <script src="bower_components/angular-moment/angular-moment.js"></script>
+
+    <script src="bower_components/firebase/firebase.js"></script>
+    <script src="bower_components/angularfire/dist/angularfire.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.2.1/js/material.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.2.1/js/ripples.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $.material.init();
+        });
+    </script>
+
+    <script src="scripts/app.js"></script>
+
+    <!--Loading Angular JS Controllers-->
+    <script src="scripts/controllers/Task.js"></script>
+    <script src="scripts/controllers/Auth.js"></script>
+    <script src="scripts/controllers/Nav.js"></script>
+    <script src="scripts/controllers/Browse.js"></script>
+
+    <!--Loading Angular JS Services-->
+    <script src="scripts/services/Auth.js"></script>
+    <script src="scripts/services/Task.js"></script>
+    <script src="scripts/services/Comment.js"></script>
+    <script src="scripts/services/Offer.js"></script>
+
+    <!--Loading Angular JS Filters-->
+    <!--<script src="scripts/controllers/Task.js"></script>-->
+
+
+</body>
+</html>
