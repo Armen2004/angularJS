@@ -1,17 +1,25 @@
 'use strict';
 
-var app = angular
-  .module('TaskNinjaApp', [
+var app = angular.module('TaskNinjaApp', [
     'ngAnimate',
-    'ngResource',    
-    'ngRoute',    
+    'ngResource',
+    'ngRoute',
     'firebase',
     'toaster',
     'angularMoment'
-  ])
-  .constant('FURL', 'https://armen-hovasapyan.firebaseio.com/')
-  .config(function ($routeProvider) {
-    $routeProvider      
+    ])
+    .constant('FURL', 'https://armen-hovasapyan.firebaseio.com/')
+    .run(["$rootScope", "$location", function($rootScope, $location) {
+        $rootScope.$on("$routeChangeError", function(event, next, previous, error) {
+            // We can catch the error thrown when the $requireAuth promise is rejected
+            // and redirect the user back to the home page
+            if (error === "AUTH_REQUIRED") {
+                $location.path("/login");
+            }
+        });
+    }])
+    .config(function ($routeProvider) {
+    $routeProvider
       .when('/', {
         templateUrl: 'views/browse.html',
         controller : 'BrowseController'
@@ -43,7 +51,16 @@ var app = angular
         templateUrl: 'views/register.html',
         controller : 'AuthController'
       })
+      .when('/dashboard', {
+        templateUrl: 'views/dashboard.html',
+        controller : 'DashboardController',
+        resolve: {
+            currentAuth: function(Auth){
+                return Auth.requireAuth();
+            }
+        }
+      })
       .otherwise({
         redirectTo: '/'
       });
-  });
+});
